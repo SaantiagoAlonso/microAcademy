@@ -14,7 +14,9 @@
     <name>microAcademy</name>
     <description>Demo project for Spring Boot</description>
     <packaging>pom</packaging>
-    <modules></modules>
+    <modules>
+        <module>config-server</module>
+    </modules>
 
 
     <properties>
