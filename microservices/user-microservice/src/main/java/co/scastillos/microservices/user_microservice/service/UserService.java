@@ -34,32 +34,9 @@ public class UserService {
     @Transactional
     public UserResponse updateUser(@Valid UpdateUserRequest userDto) {
         User user = userRepository.findById(userDto.id()).orElseThrow();
-        if (userDto.username() != null){
-            user.setUsername(userDto.username());
-        }
-        if(userDto.password() != null){
-            user.setPassword(userDto.password());
-        }
-        if(userDto.username() != null){
-            user.setUsername(userDto.username());
-        }
-        if(userDto.name() != null){
-            user.setName(userDto.name());
-        }
-        if(userDto.lastname() != null){
-            user.setLastname(userDto.lastname());
-        }
-        if(userDto.email() != null){
-            user.setEmail(userDto.email());
-        }
-        if(userDto.age() != null){
-            user.setAge(userDto.age());
-        }
-        if(userDto.phone() != null){
-            user.setPhone(userDto.phone());
-        }
-        userRepository.save(user);
-        return userMapping.toUserResponse(user);
+        User userUpdate = userMapping.updateUserFromDto(userDto,user);
+        userRepository.save(userUpdate);
+        return userMapping.toUserResponse(userUpdate);
     }
 
     public void deleteUserById(Long id) {

@@ -6,6 +6,8 @@ import co.scastillos.microservices.user_microservice.domain.user.User;
 import co.scastillos.microservices.user_microservice.domain.user.UserResponse;
 import org.springframework.stereotype.Component;
 
+import java.util.function.Consumer;
+
 @Component
 public class UserMapping {
 
@@ -18,18 +20,6 @@ public class UserMapping {
                 .email(newUserDto.email())
                 .age(newUserDto.age())
                 .phone(newUserDto.phone())
-                .build();
-    }
-
-    public User toUser(UpdateUserRequest userUpdate){
-        return User.builder()
-                .username(userUpdate.username())
-                .password(userUpdate.password())
-                .name(userUpdate.name())
-                .lastname(userUpdate.lastname())
-                .email(userUpdate.email())
-                .age(userUpdate.age())
-                .phone(userUpdate.phone())
                 .build();
     }
 
@@ -46,5 +36,21 @@ public class UserMapping {
                 .build();
     }
 
+    public User updateUserFromDto(UpdateUserRequest dto, User user){
+        setIfNotNull(dto.username(),user::setUsername);
+        setIfNotNull(dto.password(),user::setPassword);
+        setIfNotNull(dto.name(),user::setName);
+        setIfNotNull(dto.lastname(),user::setLastname);
+        setIfNotNull(dto.email(),user::setEmail);
+        setIfNotNull(dto.age(),user::setAge);
+        setIfNotNull(dto.phone(),user::setPhone);
+        return user;
+    }
+
+    private <T> void setIfNotNull(T value, Consumer<T> setter){
+        if(value != null){
+            setter.accept(value);
+        }
+    }
 
 }
