@@ -1,7 +1,6 @@
 package co.scastillos.microservices.user_microservice.domain.user;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.Builder;
 
 @Builder
@@ -12,7 +11,13 @@ public record UpdateUserRequest(
         String password,
         String name,
         String lastname,
-        @Email String email,
+
+        @NotBlank(message = "the email is required")
+        @Email(message = "the email must be in a valid format")
+        String email,
+
+        @Min(value = 8, message = "age must be greater than 8")
+        @Max(value = 100, message = "age must be less than 8")
         Integer age,
         Integer phone
 
