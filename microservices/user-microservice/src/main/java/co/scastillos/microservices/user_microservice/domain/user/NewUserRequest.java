@@ -1,35 +1,30 @@
 package co.scastillos.microservices.user_microservice.domain.user;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.Builder;
 
 @Builder
 public record NewUserRequest(
 
-        @NotNull(message = "the username is required")
-        @NotBlank(message = " the username cannot be blank")
+        @NotBlank(message = "the username is required")
         String username,
 
-        @NotNull(message = "the password is requited")
-        @NotBlank(message = "the password cannot be blank")
+        @NotBlank(message = "the password is requited")
         String password,
 
-        @NotNull(message = "the name is required")
-        @NotBlank(message = "the name cannot be blank")
+        @NotBlank(message = "the name is required")
         String name,
 
-        @NotNull(message = "the lastname is required")
-        @NotBlank(message = "the lastname cannot be blank")
+        @NotBlank(message = "the lastname is required")
         String lastname,
 
-        @NotNull(message = "the email is required")
-        @NotBlank(message = "the email cannot be blank")
-        @Email
+        @NotBlank(message = "the email is required")
+        @Email(message = "the email must be in a valid format")
         String email,
 
         @NotNull(message = "the age is required")
+        @Min(value = 8, message = "age must be greater than 8")
+        @Max(value = 100, message = "age must be less than 8")
         Integer age,
 
         Integer phone
