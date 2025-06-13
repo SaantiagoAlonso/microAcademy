@@ -16,6 +16,7 @@
     <modules>
         <module>user-microservice</module>
         <module>common-exception</module>
+        <module>common-rabbitConfig</module>
     </modules>
     <properties>
         <java.version>24</java.version>
@@ -63,6 +64,12 @@
         <dependency>
             <groupId>co.scastillos.microservices</groupId>
             <artifactId>common-exception</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>co.scastillos.microservices</groupId>
+            <artifactId>common-rabbitConfig</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
