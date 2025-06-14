@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: curse-microservice
+  config:
+    import: optional:configserver:http://localhost:8888
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: curse-db
+      username: userdata
+      password: '123456'
+      authentication-database: admin
+
+server:
+  port: 9093
