@@ -26,6 +26,7 @@ public class Curse {
     private String description;
     private Date creationDate;
     private String teacherId;
+    private String imageCurseURL;
     private List<Lesson> lessons = new ArrayList<>();
 
 

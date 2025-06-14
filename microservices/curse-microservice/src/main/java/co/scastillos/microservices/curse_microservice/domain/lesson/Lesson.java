@@ -5,9 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -22,7 +21,6 @@ public class Lesson {
 //    private Double durationMinutes;
     private String videoUrl;
     private Integer order;
-
 
 
 }
