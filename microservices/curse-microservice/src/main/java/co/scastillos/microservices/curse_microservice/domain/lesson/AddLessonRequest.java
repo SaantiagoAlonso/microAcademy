@@ -8,8 +8,7 @@ public record AddLessonRequest(
         String curseId,
         String title,
         String description,
-        String videoUrl,
+//        String videoUrl,
         Integer order
-
 ) {
 }

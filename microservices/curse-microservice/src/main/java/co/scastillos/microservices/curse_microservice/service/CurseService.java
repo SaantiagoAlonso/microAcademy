@@ -17,9 +17,10 @@ public class CurseService {
     private final CurseRepository curseRepository;
     private final CurseMapper curseMapper;
 
-    public void createCurse(NewCurseRequest curse) {
+    public String createCurse(NewCurseRequest curse) {
         Curse newCurse = curseMapper.toCurse(curse);
         curseRepository.save(newCurse);
+        return newCurse.getCurseId();
     }
 
     public CurseResponse findByCurseId(String curseId) {

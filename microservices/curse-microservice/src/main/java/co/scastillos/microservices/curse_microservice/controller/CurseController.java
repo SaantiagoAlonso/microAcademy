@@ -18,9 +18,8 @@ public class CurseController {
     private final CurseService curseService;
 
     @PostMapping
-    public ResponseEntity<Void> createCurse(@RequestBody NewCurseRequest curse){
-        curseService.createCurse(curse);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<String> createCurse(@RequestBody NewCurseRequest curse){
+        return new ResponseEntity<>(curseService.createCurse(curse), HttpStatus.CREATED);
     }
 
     @GetMapping("/{curseId}")

@@ -12,7 +12,7 @@ public class LessonMapper {
         return Lesson.builder()
                 .title(lesson.title())
                 .description(lesson.description())
-                .videoUrl(lesson.videoUrl())
+//                .videoUrl(lesson.videoUrl())
                 .order(lesson.order())
                 .build();
     }

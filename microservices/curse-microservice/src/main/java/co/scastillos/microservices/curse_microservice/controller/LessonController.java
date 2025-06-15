@@ -5,10 +5,8 @@ import co.scastillos.microservices.curse_microservice.service.LessonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1/lessons")
@@ -19,8 +17,14 @@ public class LessonController {
 
     @PostMapping
     public ResponseEntity<String> addLesson(@RequestBody AddLessonRequest lesson){
-        lessonService.addLesson(lesson);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(lessonService.addLesson(lesson),HttpStatus.CREATED);
     }
+
+    @PostMapping("/uploadVideo")
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
+        String nameFile = lessonService.uploadFile(file);
+        return ResponseEntity.ok("Archivo subido con éxito: " + nameFile);
+    }
+
 
 }
