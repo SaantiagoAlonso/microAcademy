@@ -1,18 +1,13 @@
 package co.scastillos.microservices.curse_microservice.service;
 
+import co.scastillos.microservices.curse_microservice.configuration.mapper.CurseMapper;
 import co.scastillos.microservices.curse_microservice.configuration.mapper.LessonMapper;
-import co.scastillos.microservices.curse_microservice.configuration.storage.MinIoConfig;
 import co.scastillos.microservices.curse_microservice.domain.curse.Curse;
 import co.scastillos.microservices.curse_microservice.domain.curse.CurseRepository;
+import co.scastillos.microservices.curse_microservice.domain.lesson.AllLessonsOfCurseResponse;
 import co.scastillos.microservices.curse_microservice.domain.lesson.Lesson;
 import co.scastillos.microservices.curse_microservice.domain.lesson.AddLessonRequest;
-import io.minio.BucketExistsArgs;
-import io.minio.MakeBucketArgs;
-import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,17 +20,21 @@ public class LessonService {
 
     private final CurseRepository curseRepository;
     private final LessonMapper lessonMapper;
-    private final MinioClient minioClient;
-
-//    @Value("${minio.bucket-name}")
-    private final String BUCKET_NAME = "fileresources";
+    private final FileStorageService fileStorageService;
+    private final CurseMapper curseMapper;
 
 
-
-    public String addLesson(AddLessonRequest lesson) {
+    public String addLesson(AddLessonRequest lesson, MultipartFile videoFile) {
         Curse curse = curseRepository.findById(lesson.curseId()).orElseThrow();
         Lesson newLesson = lessonMapper.toLesson(lesson);
+        if(!videoFile.isEmpty()){
+            System.out.println("hola el archivo tiene contenido");
+            String videoUrl = fileStorageService.uploadFile(videoFile);
+            newLesson.setVideoUrl(videoUrl);
+        }
+
         newLesson.setLessonId(UUID.randomUUID().toString());
+
         List<Lesson> lessonList = curse.getLessons();
         lessonList.add(newLesson);
         curse.setLessons(lessonList);
@@ -44,31 +43,14 @@ public class LessonService {
     }
 
 
-    public String uploadFile(MultipartFile file) {
-        try {
-            boolean exists = minioClient.bucketExists(BucketExistsArgs.builder().bucket(BUCKET_NAME).build());
-            if (!exists) {
-                minioClient.makeBucket(MakeBucketArgs.builder().bucket(BUCKET_NAME).build());
-            }
+    public AllLessonsOfCurseResponse allLessonOfCurse(String curseId) {
+        Curse curse = curseRepository.findById(curseId).orElseThrow();
+        List<Lesson> lessons = curse.getLessons();
+        return  AllLessonsOfCurseResponse.builder()
+                .curse(curseMapper.toCurseResponse(curse))
+                .lessons(lessons.stream().map(lessonMapper::toLessonResponse).toList())
+                .build();
 
-            String fileName = UUID.randomUUID() + "-" + file.getOriginalFilename();
 
-            minioClient.putObject(
-                    PutObjectArgs.builder()
-                            .bucket(BUCKET_NAME)
-                            .object(fileName)
-                            .stream(file.getInputStream(), file.getSize(), -1)
-                            .contentType(file.getContentType())
-                            .build()
-            );
-
-            return fileName;
-        } catch (Exception e) {
-            throw new RuntimeException("Error al subir el archivo a MinIO", e);
-        }
     }
-
-
-
-
 }

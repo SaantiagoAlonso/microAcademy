@@ -5,8 +5,10 @@ import co.scastillos.microservices.curse_microservice.domain.curse.NewCurseReque
 import co.scastillos.microservices.curse_microservice.service.CurseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -17,9 +19,13 @@ public class CurseController {
 
     private final CurseService curseService;
 
-    @PostMapping
-    public ResponseEntity<String> createCurse(@RequestBody NewCurseRequest curse){
-        return new ResponseEntity<>(curseService.createCurse(curse), HttpStatus.CREATED);
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> createCurse(
+            @RequestPart("curse") NewCurseRequest curse,
+            @RequestPart("image") MultipartFile imageFile
+
+    ){
+        return new ResponseEntity<>(curseService.createCurse(curse,imageFile), HttpStatus.CREATED);
     }
 
     @GetMapping("/{curseId}")
