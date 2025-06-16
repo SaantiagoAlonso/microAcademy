@@ -1,14 +1,15 @@
 package co.scastillos.microservices.curse_microservice.controller;
 
 import co.scastillos.microservices.curse_microservice.domain.lesson.AddLessonRequest;
+import co.scastillos.microservices.curse_microservice.domain.lesson.AllLessonsOfCurseResponse;
+import co.scastillos.microservices.curse_microservice.domain.lesson.LessonResponse;
 import co.scastillos.microservices.curse_microservice.service.LessonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1/lessons")
@@ -17,10 +18,18 @@ public class LessonController {
 
     private final LessonService lessonService;
 
-    @PostMapping
-    public ResponseEntity<String> addLesson(@RequestBody AddLessonRequest lesson){
-        lessonService.addLesson(lesson);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> addLesson(
+            @RequestPart("lesson") AddLessonRequest lesson,
+            @RequestPart("video") MultipartFile videoFile
+    ){
+        return new ResponseEntity<>(lessonService.addLesson(lesson,videoFile),HttpStatus.CREATED);
     }
+
+    @GetMapping("/{curseId}")
+    public ResponseEntity<AllLessonsOfCurseResponse> allLessonOfCurse(@PathVariable String curseId){
+        return ResponseEntity.ok(lessonService.allLessonOfCurse(curseId));
+    }
+
 
 }
