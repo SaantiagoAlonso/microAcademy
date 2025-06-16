@@ -1,9 +1,7 @@
 package co.scastillos.microservices.curse_microservice.service;
 
-import io.minio.BucketExistsArgs;
-import io.minio.MakeBucketArgs;
-import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
+import io.minio.*;
+import io.minio.http.Method;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,10 +36,26 @@ public class FileStorageService {
                             .build()
             );
 
-            return fileName;
+            return getPublicUrl(fileName);
         } catch (Exception e) {
             throw new RuntimeException("Error al subir el archivo a MinIO", e);
         }
     }
+
+
+
+
+    private String getPublicUrl(String objectName) throws Exception {
+
+        return minioClient.getPresignedObjectUrl(
+                GetPresignedObjectUrlArgs.builder()
+                        .method(Method.GET)
+                        .bucket(BUCKET_NAME)
+                        .object(objectName)
+                        .expiry(7 * 24 * 60 * 60)
+                        .build()
+        );
+    }
+
 
 }
