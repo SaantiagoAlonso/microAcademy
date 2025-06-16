@@ -7,6 +7,7 @@ import co.scastillos.microservices.curse_microservice.domain.curse.CurseReposito
 import co.scastillos.microservices.curse_microservice.domain.lesson.AllLessonsOfCurseResponse;
 import co.scastillos.microservices.curse_microservice.domain.lesson.Lesson;
 import co.scastillos.microservices.curse_microservice.domain.lesson.AddLessonRequest;
+import co.scastillos.microservices.curse_microservice.exceptions.CurseNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,10 +26,10 @@ public class LessonService {
 
 
     public String addLesson(AddLessonRequest lesson, MultipartFile videoFile) {
-        Curse curse = curseRepository.findById(lesson.curseId()).orElseThrow();
+        Curse curse = curseRepository.findById(lesson.curseId())
+                .orElseThrow(() -> new CurseNotFoundException(lesson.curseId()));
         Lesson newLesson = lessonMapper.toLesson(lesson);
         if(!videoFile.isEmpty()){
-            System.out.println("hola el archivo tiene contenido");
             String videoUrl = fileStorageService.uploadFile(videoFile);
             newLesson.setVideoUrl(videoUrl);
         }
@@ -44,7 +45,8 @@ public class LessonService {
 
 
     public AllLessonsOfCurseResponse allLessonOfCurse(String curseId) {
-        Curse curse = curseRepository.findById(curseId).orElseThrow();
+        Curse curse = curseRepository.findById(curseId)
+                .orElseThrow(() -> new CurseNotFoundException(curseId));
         List<Lesson> lessons = curse.getLessons();
         return  AllLessonsOfCurseResponse.builder()
                 .curse(curseMapper.toCurseResponse(curse))

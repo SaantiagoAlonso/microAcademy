@@ -5,6 +5,7 @@ import co.scastillos.microservices.curse_microservice.domain.curse.Curse;
 import co.scastillos.microservices.curse_microservice.domain.curse.CurseRepository;
 import co.scastillos.microservices.curse_microservice.domain.curse.CurseResponse;
 import co.scastillos.microservices.curse_microservice.domain.curse.NewCurseRequest;
+import co.scastillos.microservices.curse_microservice.exceptions.CurseNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,7 +33,8 @@ public class CurseService {
     }
 
     public CurseResponse findByCurseId(String curseId) {
-        Curse curse = curseRepository.findById(curseId).orElseThrow();
+        Curse curse = curseRepository.findById(curseId)
+                .orElseThrow(() -> new CurseNotFoundException(curseId));
         return curseMapper.toCurseResponse(curse);
     }
 
