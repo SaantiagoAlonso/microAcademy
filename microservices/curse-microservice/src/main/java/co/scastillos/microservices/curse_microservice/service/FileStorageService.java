@@ -1,5 +1,6 @@
 package co.scastillos.microservices.curse_microservice.service;
 
+import co.scastillos.microservices.curse_microservice.exceptions.FileStorageException;
 import io.minio.*;
 import io.minio.http.Method;
 import lombok.RequiredArgsConstructor;
@@ -38,11 +39,9 @@ public class FileStorageService {
 
             return getPublicUrl(fileName);
         } catch (Exception e) {
-            throw new RuntimeException("Error al subir el archivo a MinIO", e);
+            throw new FileStorageException(e);
         }
     }
-
-
 
 
     private String getPublicUrl(String objectName) throws Exception {

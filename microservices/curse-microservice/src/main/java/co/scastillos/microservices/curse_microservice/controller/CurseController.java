@@ -3,6 +3,7 @@ package co.scastillos.microservices.curse_microservice.controller;
 import co.scastillos.microservices.curse_microservice.domain.curse.CurseResponse;
 import co.scastillos.microservices.curse_microservice.domain.curse.NewCurseRequest;
 import co.scastillos.microservices.curse_microservice.service.CurseService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,7 +22,7 @@ public class CurseController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> createCurse(
-            @RequestPart("curse") NewCurseRequest curse,
+            @Valid @RequestPart("curse") NewCurseRequest curse,
             @RequestPart("image") MultipartFile imageFile
 
     ){

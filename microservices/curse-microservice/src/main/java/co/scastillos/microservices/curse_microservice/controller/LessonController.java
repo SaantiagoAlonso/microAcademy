@@ -4,6 +4,7 @@ import co.scastillos.microservices.curse_microservice.domain.lesson.AddLessonReq
 import co.scastillos.microservices.curse_microservice.domain.lesson.AllLessonsOfCurseResponse;
 import co.scastillos.microservices.curse_microservice.domain.lesson.LessonResponse;
 import co.scastillos.microservices.curse_microservice.service.LessonService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,7 +21,7 @@ public class LessonController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> addLesson(
-            @RequestPart("lesson") AddLessonRequest lesson,
+            @Valid @RequestPart("lesson") AddLessonRequest lesson,
             @RequestPart("video") MultipartFile videoFile
     ){
         return new ResponseEntity<>(lessonService.addLesson(lesson,videoFile),HttpStatus.CREATED);
