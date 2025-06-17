@@ -17,6 +17,7 @@
         <module>user-microservice</module>
         <module>teacher-microservice</module>
         <module>curse-microservice</module>
+        <module>student-microservice</module>
         <module>common-exception</module>
         <module>common-rabbitConfig</module>
     </modules>
