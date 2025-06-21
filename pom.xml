@@ -18,6 +18,7 @@
         <module>config-server</module>
         <module>discovery-server</module>
         <module>microservices</module>
+        <module>gateway</module>
     </modules>
 
 

@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleException(Exception exception){
         var errors = new HashMap<String,String>();
         var fileName = "message";
-        var errorMessage = "An error has occurred. Please try again later";
+        var errorMessage = "An error has occurred. Please try again later  " + exception;
         errors.put(fileName,errorMessage);
         return new ResponseEntity<>(new ErrorResponse(errors), HttpStatus.INTERNAL_SERVER_ERROR);
     }
