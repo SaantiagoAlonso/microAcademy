@@ -39,5 +39,4 @@ public class CurseController {
         return ResponseEntity.ok(curseService.findAllCurses());
     }
 
-
 }

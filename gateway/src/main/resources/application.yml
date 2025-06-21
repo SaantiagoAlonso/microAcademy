@@ -1,0 +1,38 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway
+  config:
+    import: optional:configserver:http://localhost:8888
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+
+            - id: user-service
+              uri: lb://user-microservice
+              predicates:
+                - Path=/api/v1/users/**
+
+            - id: student-service
+              uri: lb://student-microservice
+              predicates:
+                - Path=/api/v1/students/**
+
+            - id: curse-service
+              uri: lb://curse-microservice
+              predicates:
+                - Path=/api/v1/curses/**, /api/v1/lessons/**
+
+            - id: teacher-service
+              uri: lb://teacher-microservice
+              predicates:
+                - Path=/api/v1/teachers/**
+
+
+
+
+

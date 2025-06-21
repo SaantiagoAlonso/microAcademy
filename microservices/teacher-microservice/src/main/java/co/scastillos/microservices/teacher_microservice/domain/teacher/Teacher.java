@@ -23,5 +23,4 @@ public class Teacher {
     private String email;
     private String aboutMe;
 
-
 }
