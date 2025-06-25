@@ -1,6 +1,6 @@
 package co.scastillos.microservices.user_microservice.service;
 
-import co.scastillos.microservices.user_microservice.configuration.UserMapping;
+import co.scastillos.microservices.user_microservice.configuration.mapper.UserMapping;
 import co.scastillos.microservices.user_microservice.domain.user.*;
 import co.scastillos.microservices.user_microservice.exception.EmailAlreadyExistException;
 import co.scastillos.microservices.user_microservice.exception.UserNotFoundException;
@@ -16,7 +16,6 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
-
     private final UserMapping userMapping;
 
     public void createUser(@Valid NewUserRequest newUser) {

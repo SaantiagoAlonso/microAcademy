@@ -1,20 +1,26 @@
-package co.scastillos.microservices.user_microservice.configuration;
+package co.scastillos.microservices.user_microservice.configuration.mapper;
 
 import co.scastillos.microservices.user_microservice.domain.user.NewUserRequest;
 import co.scastillos.microservices.user_microservice.domain.user.UpdateUserRequest;
 import co.scastillos.microservices.user_microservice.domain.user.User;
 import co.scastillos.microservices.user_microservice.domain.user.UserResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.function.Consumer;
 
 @Component
+@RequiredArgsConstructor
 public class UserMapping {
+
+    private final PasswordEncoder passwordEncoder;
 
     public User toUser(NewUserRequest newUserDto){
         return User.builder()
                 .username(newUserDto.username())
-                .password(newUserDto.password())
+                .password(passwordEncoder.encode(newUserDto.password()))
                 .name(newUserDto.name())
                 .lastname(newUserDto.lastname())
                 .email(newUserDto.email())
