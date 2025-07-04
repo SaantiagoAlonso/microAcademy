@@ -2,6 +2,7 @@ package co.scastillos.microservices.user_microservice.configuration.security.uti
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
@@ -39,6 +40,30 @@ public class JwtUtil {
         return token;
 
     }
+
+
+    public boolean isTokenValid(String token) {
+        try {
+            JWT.require(Algorithm.HMAC256(this.privateKey))
+                    .withIssuer(this.userGenerator)
+                    .build()
+                    .verify(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public String extractUsername(String token) {
+        DecodedJWT jwt = JWT.decode(token);
+        return jwt.getSubject();
+    }
+
+    public Date extractExpiration(String token) {
+        DecodedJWT jwt = JWT.decode(token);
+        return jwt.getExpiresAt();
+    }
+
 
 
 }

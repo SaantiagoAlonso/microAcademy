@@ -15,24 +15,48 @@ spring:
             - id: user-service
               uri: lb://user-microservice
               predicates:
-                - Path=/api/v1/users/**
+                - Path=/api/v1/users/** , /api/v1/user/auth/**
+
 
             - id: student-service
               uri: lb://student-microservice
               predicates:
                 - Path=/api/v1/students/**
+              filters:
+                - CustomFilterFactory
 
             - id: curse-service
               uri: lb://curse-microservice
               predicates:
                 - Path=/api/v1/curses/**, /api/v1/lessons/**
+              filters:
+                - CustomFilterFactory
 
             - id: teacher-service
               uri: lb://teacher-microservice
               predicates:
                 - Path=/api/v1/teachers/**
+              filters:
+                - CustomFilterFactory
 
-
+#spring:
+#  application:
+#    name: gateway
+#  config:
+#    import: optional:configserver:http://localhost:8888
+#
+#  cloud:
+#    gateway:
+#      server:
+#        webflux:
+#          routes:
+#            - id: user-service
+#              uri: lb://user-microservice
+#              predicates:
+#                - Path=/api/v1/users/**
+#                - Path=/api/v1/user/auth/**
+#              filters:
+#                - JwtFilter
 
 
 
